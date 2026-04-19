@@ -1,50 +1,46 @@
-# Welcome to your Expo app 👋
+# Skillora
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+Skillora is an AI-powered course builder app built natively with React Native and Expo Router. It empowers creators to intelligently design, generate, and launch comprehensive courses in minutes.
 
-## Get started
+## 🚀 Features
 
-1. Install dependencies
+* **Quick AI Generation:** Generate stunning curriculum outlines using advanced LLMs.
+* **Smart Curriculum:** Manage chapters, lessons, and modern multimedia content.
+* **Deep Analytics:** Track student progress and performance with rich metric insights.
+* **Modern Cross-Platform Design:** Beautiful native interfaces tailored for iOS, Android, and Web using custom glowing gradients and elegant typography.
+* **Secure Backend Architecture:** Utilizes robust Expo API Server Routes bridged directly with Neon DB (Serverless PostgreSQL) using Drizzle ORM.
 
+## 🛠 Tech Stack
+
+* **Framework:** React Native / Expo
+* **Routing:** Expo Router
+* **Database:** Neon PostgreSQL Serverless
+* **ORM:** Drizzle (`drizzle-orm`, `drizzle-kit`)
+
+## 💻 Running Locally
+
+1. Install dependencies:
    ```bash
    npm install
    ```
 
-2. Start the app
-
-   ```bash
-   npx expo start
+2. Setup your database credentials by opening or creating `.env.local`:
+   ```env
+   DATABASE_URL=postgresql://user:password@endpoint.neon.tech/neondb?sslmode=require
    ```
 
-In the output, you'll find options to open the app in a
+3. Run Drizzle migrations to initialize the core database tables:
+   ```bash
+   npm run db:generate
+   npm run db:push
+   ```
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+4. Start the Expo development server:
+   ```bash
+   npm run start
+   ```
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
+## 🤝 Contributing
 
-## Get a fresh project
-
-When you're ready, run:
-
-```bash
-npm run reset-project
-```
-
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
-
-## Learn more
-
-To learn more about developing your project with Expo, look at the following resources:
-
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
-
-## Join the community
-
-Join our community of developers creating universal apps.
-
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+Contributions, issues, and feature requests are welcome!
+Feel free to check out the [issues page](https://github.com/divysaxena24/Skillora/issues).
