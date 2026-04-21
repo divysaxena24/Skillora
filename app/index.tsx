@@ -2,24 +2,8 @@ import { Text, View, StyleSheet, TouchableOpacity, ScrollView, useWindowDimensio
 import { SafeAreaView } from "react-native-safe-area-context";
 import { StatusBar } from "expo-status-bar";
 import { Ionicons } from "@expo/vector-icons";
-import { useRouter } from "expo-router";
-
-// Custom Navbar Component
-function Navbar() {
-  return (
-    <View style={styles.navbar}>
-      <View style={styles.navLeft}>
-        <View style={styles.logoBadge}>
-          <Ionicons name="planet" size={20} color="#FFFFFF" />
-        </View>
-        <Text style={styles.navBrand}>Skillora</Text>
-      </View>
-      <TouchableOpacity style={styles.menuButton} activeOpacity={0.7} onPress={() => console.log('Menu opened')}>
-        <Ionicons name="grid-outline" size={26} color="#F8FAFC" />
-      </TouchableOpacity>
-    </View>
-  );
-}
+import { useRouter, Redirect } from "expo-router";
+import { SignedIn, SignedOut } from "@clerk/clerk-expo";
 
 export default function Index() {
   const router = useRouter();
@@ -30,65 +14,80 @@ export default function Index() {
   const circleSize2 = Math.max(width, height) * 0.9;
 
   return (
-    <SafeAreaView style={styles.safeArea}>
-      <StatusBar style="light" />
-      
-      {/* Dynamic Background Decor - updating continuously on resize */}
-      <View style={[
-        styles.circle1, 
-        { 
-          width: circleSize1, 
-          height: circleSize1, 
-          borderRadius: circleSize1 / 2,
-          top: -circleSize1 * 0.3,
-          left: -circleSize1 * 0.2
-        }
-      ]} />
-      <View style={[
-        styles.circle2, 
-        { 
-          width: circleSize2, 
-          height: circleSize2, 
-          borderRadius: circleSize2 / 2,
-          bottom: -circleSize2 * 0.2,
-          right: -circleSize2 * 0.2
-        }
-      ]} />
-      
-      <Navbar />
+    <>
+      {/* If authenticated, bypass this screen automatically */}
+      <SignedIn>
+        <Redirect href="/(home)" />
+      </SignedIn>
 
-      <ScrollView 
-        contentContainerStyle={styles.scrollContainer} 
-        showsVerticalScrollIndicator={false}
-        bounces={true}
-      >
-        <View style={styles.responsiveContentWrapper}>
-          <View style={styles.content}>
-            <View style={styles.iconContainer}>
-              <Ionicons name="sparkles" size={42} color="#A78BFA" />
+      {/* If unauthenticated, display the Welcome screen */}
+      <SignedOut>
+        <SafeAreaView style={styles.safeArea}>
+          <StatusBar style="light" />
+          
+          <View style={[
+            styles.circle1, 
+            { 
+              width: circleSize1, 
+              height: circleSize1, 
+              borderRadius: circleSize1 / 2,
+              top: -circleSize1 * 0.3,
+              left: -circleSize1 * 0.2
+            }
+          ]} />
+          <View style={[
+            styles.circle2, 
+            { 
+              width: circleSize2, 
+              height: circleSize2, 
+              borderRadius: circleSize2 / 2,
+              bottom: -circleSize2 * 0.2,
+              right: -circleSize2 * 0.2
+            }
+          ]} />
+
+          <ScrollView 
+            contentContainerStyle={styles.scrollContainer} 
+            showsVerticalScrollIndicator={false}
+            bounces={true}
+          >
+            <View style={styles.responsiveContentWrapper}>
+              
+              <View style={styles.headerSpacer} />
+
+              <View style={styles.content}>
+                <View style={styles.iconContainer}>
+                  <Ionicons name="sparkles" size={42} color="#A78BFA" />
+                </View>
+
+                <Text style={styles.title}>Welcome to <Text style={styles.brand}>Skillora</Text></Text>
+                <Text style={styles.subtitle}>
+                  The smartest AI-powered course builder. Design, create, and launch intelligent courses in minutes.
+                </Text>
+
+                <View style={styles.features}>
+                  <FeatureItem icon="flash" title="Quick AI Generation" />
+                  <FeatureItem icon="school" title="Smart Curriculum" />
+                  <FeatureItem icon="stats-chart" title="Deep Analytics" />
+                </View>
+              </View>
+
+              <View style={styles.buttonContainer}>
+                <TouchableOpacity 
+                  style={styles.button} 
+                  activeOpacity={0.8} 
+                  onPress={() => router.push('/(auth)/sign-in')}
+                >
+                  <Text style={styles.buttonText}>Get Started Now</Text>
+                  <Ionicons name="arrow-forward" size={20} color="#FFFFFF" />
+                </TouchableOpacity>
+              </View>
+
             </View>
-
-            <Text style={styles.title}>Welcome to <Text style={styles.brand}>Skillora</Text></Text>
-            <Text style={styles.subtitle}>
-              The smartest AI-powered course builder. Design, create, and launch intelligent courses in minutes.
-            </Text>
-
-            <View style={styles.features}>
-              <FeatureItem icon="flash" title="Quick AI Generation" />
-              <FeatureItem icon="school" title="Smart Curriculum" />
-              <FeatureItem icon="stats-chart" title="Deep Analytics" />
-            </View>
-          </View>
-
-          <View style={styles.buttonContainer}>
-            <TouchableOpacity style={styles.button} activeOpacity={0.8} onPress={() => console.log("Get Started!")}>
-              <Text style={styles.buttonText}>Get Started Now</Text>
-              <Ionicons name="arrow-forward" size={20} color="#FFFFFF" />
-            </TouchableOpacity>
-          </View>
-        </View>
-      </ScrollView>
-    </SafeAreaView>
+          </ScrollView>
+        </SafeAreaView>
+      </SignedOut>
+    </>
   );
 }
 
@@ -108,50 +107,9 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#0F172A",
   },
-  // Navbar Styles
-  navbar: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    width: "100%",
-    paddingHorizontal: 24,
-    paddingVertical: 16,
-    zIndex: 10,
-    borderBottomWidth: 1,
-    borderBottomColor: "rgba(255, 255, 255, 0.05)",
+  headerSpacer: {
+    height: 40,
   },
-  navLeft: {
-    flexDirection: "row",
-    alignItems: "center",
-    gap: 10,
-  },
-  logoBadge: {
-    width: 32,
-    height: 32,
-    borderRadius: 8,
-    backgroundColor: "#8B5CF6",
-    justifyContent: "center",
-    alignItems: "center",
-    shadowColor: "#8B5CF6",
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.3,
-    shadowRadius: 8,
-    elevation: 4,
-  },
-  navBrand: {
-    fontSize: 22,
-    fontWeight: "800",
-    color: "#F8FAFC",
-    letterSpacing: -0.5,
-  },
-  menuButton: {
-    padding: 6,
-    borderRadius: 12,
-    backgroundColor: "rgba(30, 41, 59, 0.5)",
-    borderWidth: 1,
-    borderColor: "rgba(255, 255, 255, 0.1)",
-  },
-  // Main Layout Styles
   scrollContainer: {
     flexGrow: 1,
     alignItems: "center",
@@ -161,7 +119,7 @@ const styles = StyleSheet.create({
   responsiveContentWrapper: {
     flex: 1,
     width: "100%",
-    maxWidth: 480, // Restricts width on larger tablets and web browsers
+    maxWidth: 480, 
     justifyContent: "space-between", 
   },
   circle1: {
@@ -174,7 +132,7 @@ const styles = StyleSheet.create({
   },
   content: {
     alignItems: "center",
-    marginTop: Platform.OS === 'web' ? 20 : 30, // Adjusted margins since navbar takes space
+    marginTop: Platform.OS === 'web' ? 20 : 30,
     zIndex: 1,
     width: "100%",
   },
